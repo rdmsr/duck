@@ -7,7 +7,7 @@ quack! >o)
 > Modern documentation tool for C and C++ projects - inspired by `rustdoc`.
 
 
-**[Live demo](https://rdmsr.github.io/cppdoc)**
+**[Live demo](https://rdmsr.github.io/duck)**
 
 ## What is duck?
 Most C/C++ documentation generators (like Doxygen) produce API references, a list of functions and types. `duck` goes further: it lets you write structured, book-style guides *alongside* your API reference, integrated directly with your codebase.
