@@ -13,7 +13,7 @@ book = "extra-pages"
 [output]
 static_dir = "static"
 path = "docs"
-base_url = "/cppdoc"
+base_url = "/duck"
 theme = "ayu-dark"
 
 [doctests]

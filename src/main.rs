@@ -48,6 +48,9 @@ struct SearchIndex {
 
 #[derive(Subcommand, Debug)]
 enum Commands {
+    #[clap(name = "init", about = "Generates a sample duck configuration")]
+    Init,
+
     #[clap(name = "build", about = "Build documentation for the project")]
     Build {
         /// Dump JSON output
@@ -55,7 +58,7 @@ enum Commands {
         dump_json: bool,
 
         /// Configuration file to use
-        #[arg(short, long, default_value = "cppdoc.toml", value_name = "FILE")]
+        #[arg(short, long, default_value = "duck.toml", value_name = "FILE")]
         config_file: Option<String>,
 
         /// Cached JSON output to use
@@ -113,6 +116,47 @@ thread_local! {
     };
 }
 
+fn init_new_project() {
+    let mut file = match std::fs::File::create_new("duck.toml") {
+        Ok(f) => f,
+        Err(e) => {
+            report_error(&format!("writing config file: {}", e));
+            std::process::exit(1);
+        }
+    };
+
+    let base_config = "[project]
+name = \"Project\"
+version = \"0.1.0\"
+
+[input]
+# Unix-style glob of files where API reference documentation is present
+glob = \"**/*.h\"
+# Additional compiler arguments, add -xc++ for C++ support
+compiler_arguments = []
+
+# [pages]
+# Uncomment this to generate an index page from a markdown file
+# index = \"README.md\"
+
+# Uncomment this to generate a book from a directory
+#book = \"pages\"
+
+[output]
+# Static directory that is copied over to the output directory
+static_dir = \"static\"
+# Output directory
+path = \"docs\"
+
+# Base URL
+base_url = \"/\"
+";
+
+    file.write_all(base_config.as_bytes()).unwrap();
+
+    println!("duck initialized in current directory");
+}
+
 fn main() {
     let args = Cli::parse();
 
@@ -122,7 +166,7 @@ fn main() {
             config_file,
             cached,
         } => {
-            let config_file = config_file.unwrap_or("cppdoc.toml".to_string());
+            let config_file = config_file.unwrap_or("duck.toml".to_string());
             let m = MultiProgress::new();
 
             let config = match config::Config::new(&config_file) {
@@ -134,6 +178,8 @@ fn main() {
             };
 
             let mut output: parser::Output = Default::default();
+
+            println!("\n{:>3}quack! >o)\n{:>10}(_>\n{:>10}duck", " ", " ", " ");
 
             if cached.is_none() {
                 let files: Vec<_> = glob(&config.input.glob)
@@ -152,7 +198,9 @@ fn main() {
                             let mut state = state.borrow_mut();
                             let parser = &mut *state;
 
-                            bar.set_message(format!("Parsing {}", file.to_string_lossy()));
+                            if !dump_json {
+                                bar.set_message(format!("Parsing {}", file.to_string_lossy()));
+                            }
 
                             parser.parse(&config, file.to_string_lossy().as_ref(), &mut output);
 
@@ -172,13 +220,15 @@ fn main() {
 
                 output = final_output;
 
-                bar.finish_with_message("Parsing complete");
+                if !dump_json {
+                    bar.finish_with_message("Parsing complete");
+                }
             } else {
                 let data = std::fs::read_to_string(cached.unwrap()).expect("Unable to read file");
                 match serde_json::from_str::<parser::Output>(&data) {
                     Ok(out) => output = out,
                     Err(e) => {
-                        report_error(&format!("Error reading cached cppdoc database: {e:}"));
+                        report_error(&format!("Error reading cached database: {e:}"));
                     }
                 }
             }
@@ -257,8 +307,10 @@ fn main() {
                 &highlight_state,
             );
 
-            let index = match config.pages.index {
-                Some(ref x) => match std::fs::read_to_string(x) {
+            let pages_config = config.pages.as_ref();
+
+            let index = match pages_config.and_then(|p| p.index.as_ref()) {
+                Some(x) => match std::fs::read_to_string(x) {
                     Ok(s) => s,
                     Err(e) => {
                         report_error(&format!("Could not read index file: {}", e));
@@ -283,17 +335,11 @@ fn main() {
 
             let mut extra_pages = Vec::new();
 
-            if let Some(_) = config.pages.extra {
-                report_warning("The `extra` option is deprecated, please use `book` instead");
-            }
-
             let mut summary: book::Summary = Default::default();
 
-            if let Some(ref book_dir) = config.pages.book {
-                let path = std::path::Path::new(&book_dir).join("SUMMARY.md");
-
+            if let Some(book_dir) = pages_config.and_then(|p| p.book.as_ref()) {
+                let path = std::path::Path::new(book_dir).join("SUMMARY.md");
                 let contents = std::fs::read_to_string(path).unwrap();
-
                 summary = book::parse_summary(&contents, book_dir);
             }
 
@@ -516,6 +562,10 @@ fn main() {
             }
 
             println!("Documentation generated in {}", config.output.path);
+        }
+
+        Commands::Init => {
+            init_new_project();
         }
     }
 }

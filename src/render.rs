@@ -108,27 +108,32 @@ pub fn process_markdown(
 
                 let syntax = highlight_state
                     .syntax_set
-                    .find_syntax_by_extension(&code_lang)
-                    .unwrap();
+                    .find_syntax_by_extension(&code_lang);
 
-                let mut html_generator = ClassedHTMLGenerator::new_with_class_style(
-                    syntax,
-                    &highlight_state.syntax_set,
-                    ClassStyle::Spaced,
-                );
+                let html: String;
 
-                for line in LinesWithEndings::from(&code) {
-                    html_generator
-                        .parse_html_for_line_which_includes_newline(line)
-                        .unwrap();
+                if let Some(stx) = syntax {
+                    let mut html_generator = ClassedHTMLGenerator::new_with_class_style(
+                        stx,
+                        &highlight_state.syntax_set,
+                        ClassStyle::Spaced,
+                    );
+
+                    for line in LinesWithEndings::from(&code) {
+                        html_generator
+                            .parse_html_for_line_which_includes_newline(line)
+                            .unwrap();
+                    }
+
+                    let generated_html = html_generator.finalize();
+
+                    html = format!(
+                        "<div class=\"code highlight\"><pre>{}</pre></div>",
+                        generated_html
+                    );
+                } else {
+                    html = format!("<div class=\"code highlight\"><pre>{}</pre></div>", code);
                 }
-
-                let generated_html = html_generator.finalize();
-
-                let html = format!(
-                    "<div class=\"code highlight\"><pre>{}</pre></div>",
-                    generated_html
-                );
 
                 in_code_block = false;
                 code.clear();

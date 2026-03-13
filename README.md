@@ -1,24 +1,27 @@
-# cppdoc 
-`cppdoc` is a C++ documentation generator inspired by `rustdoc`
+```
+quack! >o)
+	   (_>
+       duck
+```
+
+> Modern documentation tool for C and C++ projects - inspired by `rustdoc`.
+
+
+**[Live demo](https://rdmsr.github.io/cppdoc)**
+
+## What is duck?
+Most C/C++ documentation generators (like Doxygen) produce API references, a list of functions and types. `duck` goes further: it lets you write structured, book-style guides *alongside* your API reference, integrated directly with your codebase.
+
 
 ## Features
 - **`rustdoc`-style documentation comments**, written in Markdown
-- **Documentation tests**: run code blocks in your docs as actual tests 
+- **Documentation tests** - code blocks in your docs run as real tests 
 - **`mdbook`-style hierarchy** for page structure and navigation
 - **[Mermaid](https://mermaid.js.org)** support for graphs
 - **Customizable themes** with user-supplied CSS and Sublime Text syntax highlighting themes
 - **libclang-based parser** with support for records, enums, functions and namespaces
-- **Fast**: `cppdoc` has been benchmarked to run around **4-5x faster** than Doxygen with clang-assisted parsing
-
-
-## Motivation
-`cppdoc` intends to bridge the gap between documentation pages and API
-references. Unlike most documentation generators such as `Doxygen`
-which solely focus on the generation of code references, `cppdoc` enables users to write structured, "book-style" documentation integrated directly with their codebase.
+- **Fast**: benchmarked to run around **4-5x faster** than Doxygen with clang-assisted parsing
 
 
 ## Usage
 See [USAGE.md](USAGE.md)
-
-## Preview
-There is a live demo available [here](https://rdmsr.github.io/cppdoc).

@@ -5,7 +5,7 @@ use std::error::Error;
 pub struct Config {
     pub project: Project,
     pub input: Input,
-    pub pages: Pages,
+    pub pages: Option<Pages>,
     pub output: Output,
     pub doctests: Option<Doctest>,
 }
@@ -25,7 +25,6 @@ pub struct Input {
 #[derive(Deserialize, Serialize, Clone, Debug)]
 pub struct Pages {
     pub index: Option<String>,
-    pub extra: Option<Vec<String>>,
     pub book: Option<String>,
 }
 
