@@ -4,7 +4,7 @@
 <head>
 	
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="/cppdoc/style.css" />
+<link rel="stylesheet" href="/duck/style.css" />
 <title>Search - Example </title>
 
 <script src="https://cdn.jsdelivr.net/npm/minisearch@7.1.1/dist/umd/index.min.js"></script>
@@ -18,7 +18,7 @@
 	const capitalize = s => s && String(s[0]).toUpperCase() + String(s).slice(1)
 
 
-  fetch('/cppdoc/search_index.json')
+  fetch('/duck/search_index.json')
 		.then(response => response.json())
 		.then(data => {
 			// Create the MiniSearch instance
@@ -46,7 +46,7 @@
 			for (var i = 0; i < results.length; i++) {
 				var result = data[results[i].id];
 				var resultElement = document.createElement('li');
-				resultElement.innerHTML = '<a class=\"item-name\" href="/cppdoc/' + result.link + '.html">' + result.name + '</a>';
+				resultElement.innerHTML = '<a class=\"item-name\" href="/duck/' + result.link + '.html">' + result.name + '</a>';
 
 				var resultDescription = document.createElement('div');
 				resultDescription.className = 'item-desc';
@@ -69,7 +69,7 @@
   <div class="sidebarwrapper">
     
     <h1>Example</h1>
-    <form action="/cppdoc/search.html" method="get">
+    <form action="/duck/search.html" method="get">
       <input class="searchbar" type="text" name="query" placeholder="Search...">
     </form>
     
@@ -80,7 +80,7 @@
         
           
             <li>
-     <a href="/cppdoc/extra-pages/extra-page.md.html">Extra Page</a> 
+     <a href="/duck/extra-pages/extra-page.md.html">Extra Page</a> 
   </li>
   
 
@@ -90,10 +90,10 @@
 
       <h2>Reference</h2>
       <ul>
-        <li><a href="/cppdoc/index.html#functions">Functions</a></li>
-        <li><a href="/cppdoc/index.html#namespaces">Namespaces</a></li>
-        <li><a href="/cppdoc/index.html#records">Records</a></li>
-        <li><a href="/cppdoc/index.html#enums">Enums</a></li>
+        <li><a href="/duck/index.html#functions">Functions</a></li>
+        <li><a href="/duck/index.html#namespaces">Namespaces</a></li>
+        <li><a href="/duck/index.html#records">Records</a></li>
+        <li><a href="/duck/index.html#enums">Enums</a></li>
       </ul>
     </div>
     
@@ -102,17 +102,17 @@
 
 <div class="mobile-nav" role="navigation" aria-label="Mobile Navigation">
   <h1>Example</h1>
-  <form action="/cppdoc/search.html" method="get">
+  <form action="/duck/search.html" method="get">
     <input class="searchbar" type="text" name="query" placeholder="Search...">
   </form>
   <nav>
     <h2>Contents</h2>
     <ul>
-      <li><a href="/cppdoc/index.html">Index</a></li>
+      <li><a href="/duck/index.html">Index</a></li>
       
         
           <li>
-     <a href="/cppdoc/extra-pages/extra-page.md.html">Extra Page</a> 
+     <a href="/duck/extra-pages/extra-page.md.html">Extra Page</a> 
   </li>
   
 
@@ -121,10 +121,10 @@
     </ul>
     <h2>Reference</h2>
     <ul>
-      <li><a href="/cppdoc/index.html#functions">Functions</a></li>
-      <li><a href="/cppdoc/index.html#namespaces">Namespaces</a></li>
-      <li><a href="/cppdoc/index.html#records">Records</a></li>
-      <li><a href="/cppdoc/index.html#enums">Enums</a></li>
+      <li><a href="/duck/index.html#functions">Functions</a></li>
+      <li><a href="/duck/index.html#namespaces">Namespaces</a></li>
+      <li><a href="/duck/index.html#records">Records</a></li>
+      <li><a href="/duck/index.html#enums">Enums</a></li>
     </ul>
   </nav>
 </div>
