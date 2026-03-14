@@ -179,7 +179,9 @@ fn main() {
 
             let mut output: parser::Output = Default::default();
 
-            println!("\n{:>3}quack! >o)\n{:>10}(_>\n{:>10}duck", " ", " ", " ");
+            if !dump_json {
+                println!("\n{:>3}quack! >o)\n{:>10}(_>\n{:>10}duck", " ", " ", " ");
+            }
 
             if cached.is_none() {
                 let files: Vec<_> = glob(&config.input.glob)
