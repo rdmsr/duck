@@ -662,9 +662,30 @@ impl<'a> Parser<'a> {
             .parse()
             .unwrap();
 
+        let main_file = tu.get_file(file).unwrap();
+
         for cursor in tu.get_entity().get_children() {
-            if cursor.is_in_main_file() {
-                self.parse_node(cursor, &mut out.root, &mut out.index, "");
+            let location = cursor.get_location();
+
+            if let Some(loc) = location {
+                // Check both the spelling location (normal) and expansion location (macros)
+                let in_main = loc
+                    .get_file_location()
+                    .file
+                    .as_ref()
+                    .map(|f| *f == main_file)
+                    .unwrap_or(false);
+
+                let in_main_expansion = loc
+                    .get_expansion_location()
+                    .file
+                    .as_ref()
+                    .map(|f| *f == main_file)
+                    .unwrap_or(false);
+
+                if in_main || in_main_expansion {
+                    self.parse_node(cursor, &mut out.root, &mut out.index, "");
+                }
             }
         }
     }

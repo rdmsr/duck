@@ -149,7 +149,7 @@ static_dir = \"static\"
 path = \"docs\"
 
 # Base URL
-base_url = \"/\"
+base_url = \"\"
 ";
 
     file.write_all(base_config.as_bytes()).unwrap();

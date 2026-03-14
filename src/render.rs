@@ -66,14 +66,17 @@ pub fn process_markdown(
     let mut in_metadata = false;
     let mut metadata = String::new();
     let mut title = String::new();
+    let mut in_doc_link = false;
 
-    let parser = pulldown_cmark::Parser::new_ext(
-        input,
-        pulldown_cmark::Options::ENABLE_YAML_STYLE_METADATA_BLOCKS
-            | pulldown_cmark::Options::ENABLE_HEADING_ATTRIBUTES
-            | pulldown_cmark::Options::ENABLE_FOOTNOTES,
-    )
-    .filter_map(|event| match event {
+    let mut options = pulldown_cmark::Options::empty();
+
+    options.insert(pulldown_cmark::Options::ENABLE_YAML_STYLE_METADATA_BLOCKS);
+    options.insert(pulldown_cmark::Options::ENABLE_HEADING_ATTRIBUTES);
+    options.insert(pulldown_cmark::Options::ENABLE_FOOTNOTES);
+    options.insert(pulldown_cmark::Options::ENABLE_GFM);
+    options.insert(pulldown_cmark::Options::ENABLE_TABLES);
+
+    let parser = pulldown_cmark::Parser::new_ext(input, options).filter_map(|event| match event {
         // -- Add support for mermaid code blocks and syntax highlighting --
         Event::Start(Tag::CodeBlock(CodeBlockKind::Fenced(lang))) => {
             code_lang = lang.to_string();
@@ -185,6 +188,7 @@ pub fn process_markdown(
                     let real = get_path_for_name(url, index);
 
                     if let Some(real) = real {
+                        in_doc_link = true;
                         return Some(Event::Html(
                             format!("<a href=\"{}/{}.html\">", config.output.base_url, real).into(),
                         ));
@@ -200,7 +204,14 @@ pub fn process_markdown(
             }))
         }
 
-        Event::End(TagEnd::Link {}) => Some(Event::Html("</a>".into())),
+        Event::End(TagEnd::Link) => {
+            if in_doc_link {
+                in_doc_link = false;
+                Some(Event::Html("</a>".into()))
+            } else {
+                Some(Event::End(TagEnd::Link))
+            }
+        }
 
         _ => Some(event),
     });
