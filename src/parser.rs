@@ -595,34 +595,41 @@ impl<'a> Parser<'a> {
                 let mut type_ = String::new();
                 let mut templated = false;
 
-                let child_count = node.get_children().len();
+                let children = node.get_children();
+                let child_count = children.len();
 
-                // Wow this sucks
-                for (i, c) in node.get_children().iter().enumerate() {
-                    if c.get_kind() == clang::EntityKind::TypeRef {
-                        if let Some(t) = c.get_typedef_underlying_type() {
-                            type_.push_str(&t.get_display_name());
-                        } else {
-                            let display_name = c.get_display_name().unwrap();
-                            let display_name = display_name.trim_start_matches("struct ");
-                            type_.push_str(display_name);
+                let is_function_pointer = children
+                    .iter()
+                    .any(|c| c.get_kind() == clang::EntityKind::ParmDecl);
+
+                if !is_function_pointer {
+                    // Wow this sucks
+                    for (i, c) in children.iter().enumerate() {
+                        if c.get_kind() == clang::EntityKind::TypeRef {
+                            if let Some(t) = c.get_typedef_underlying_type() {
+                                type_.push_str(&t.get_display_name());
+                            } else {
+                                let display_name = c.get_display_name().unwrap();
+                                let display_name = display_name.trim_start_matches("struct ");
+                                type_.push_str(display_name);
+                            }
+                        } else if c.get_kind() == clang::EntityKind::TemplateRef {
+                            templated = true;
+                            type_ = c.get_display_name().unwrap();
+                            type_.push('<');
                         }
-                    } else if c.get_kind() == clang::EntityKind::TemplateRef {
-                        templated = true;
-                        type_ = c.get_display_name().unwrap();
-                        type_.push('<');
+
+                        if templated && i < child_count - 1 && i != 0 {
+                            type_.push(',');
+                        }
                     }
 
-                    if templated && i < child_count - 1 && i != 0 {
-                        type_.push(',');
+                    if templated {
+                        type_.push('>');
                     }
                 }
 
-                if templated {
-                    type_.push('>');
-                }
-
-                if type_.is_empty() {
+                if type_.is_empty() || is_function_pointer {
                     type_ = node
                         .get_typedef_underlying_type()
                         .unwrap()

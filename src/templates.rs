@@ -22,8 +22,6 @@ fn cleanup_type(type_: &str) -> String {
     // Lmao
 
     let ret = type_
-        .replace(" &", "</span>&")
-        .replace(" *", "</span>*")
         .replace(
             "struct ",
             "</span><span class=\"storage type c\">struct </span><span class=\"storage type c\">",
@@ -80,7 +78,7 @@ fn tera_get_link_for_namespace(index: HashMap<String, String>) -> impl tera::Fun
         move |args: &HashMap<String, tera::Value>| -> tera::Result<tera::Value> {
             let namespace = args.get("namespace").unwrap().as_str().unwrap();
 
-            let ret = render::get_path_for_name(namespace, &index);
+            let ret = render::get_path_for_name(namespace, &index, None);
 
             if ret.is_some() {
                 let parts = namespace.split("::").collect::<Vec<_>>();
@@ -304,6 +302,14 @@ fn get_link_for_type(
     config: &Config,
     index: &HashMap<String, String>,
 ) -> Option<String> {
+    let explicit_kind = if name.contains("struct ") {
+        Some("record")
+    } else if name.contains("enum ") {
+        Some("enum")
+    } else {
+        None
+    };
+
     let cleaned_name = name
         .trim_start_matches("const ")
         .trim_start_matches("struct ")
@@ -375,7 +381,7 @@ fn get_link_for_type(
     // if name starts with '::', then we must use the global namespace
     if cleaned_name.starts_with("::") {
         let cleaned_name = cleaned_name.trim_start_matches("::");
-        let ret = render::get_path_for_name(cleaned_name, index);
+        let ret = render::get_path_for_name(cleaned_name, index, explicit_kind);
 
         if let Some(ret) = ret {
             return Some(format!(
@@ -386,7 +392,11 @@ fn get_link_for_type(
     }
 
     // First try name in current namespace
-    let ret = render::get_path_for_name(&format!("{}::{}", curr_namespace, cleaned_name), index);
+    let ret = render::get_path_for_name(
+        &format!("{}::{}", curr_namespace, cleaned_name),
+        index,
+        explicit_kind,
+    );
 
     let name_without_suffix = name_without_suffix
         .replace(
@@ -410,7 +420,7 @@ fn get_link_for_type(
     }
 
     // Then try name in global namespace
-    let ret = render::get_path_for_name(cleaned_name, index);
+    let ret = render::get_path_for_name(cleaned_name, index, explicit_kind);
 
     if let Some(ret) = ret {
         return Some(format!(
@@ -423,8 +433,11 @@ fn get_link_for_type(
     let mut parts = curr_namespace.split("::").collect::<Vec<_>>();
 
     while !parts.is_empty() {
-        let ret =
-            render::get_path_for_name(&format!("{}::{}", parts.join("::"), cleaned_name), index);
+        let ret = render::get_path_for_name(
+            &format!("{}::{}", parts.join("::"), cleaned_name),
+            index,
+            explicit_kind,
+        );
 
         if let Some(ret) = ret {
             return Some(format!(
@@ -681,6 +694,8 @@ fn output_alias(
     let mut context = tera::Context::new();
 
     let ns_name = alias.namespace.clone().unwrap_or_default();
+
+    println!("{:?}", cleanup_type(&alias.type_));
 
     let listing = format!(
         "<span class=\"storage type c\">using</span> {} = {}",

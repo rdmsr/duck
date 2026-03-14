@@ -507,10 +507,10 @@ fn main() {
                         "namespace" => {
                             format!(
                                 "{}/index",
-                                get_path_for_name(item.0, &output.index).unwrap_or_default()
+                                get_path_for_name(item.0, &output.index, None).unwrap_or_default()
                             )
                         }
-                        _ => get_path_for_name(item.0, &output.index).unwrap_or_default(),
+                        _ => get_path_for_name(item.0, &output.index, None).unwrap_or_default(),
                     }
                     .replace("\"", "&quot;")
                     .to_string(),

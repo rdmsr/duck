@@ -24,8 +24,13 @@ pub struct HighlightState {
     pub theme_set: ThemeSet,
 }
 
-pub fn get_path_for_name(name: &str, index: &HashMap<String, String>) -> Option<String> {
-    let kind = index.get(name)?;
+pub fn get_path_for_name(
+    name: &str,
+    index: &HashMap<String, String>,
+    expected_kind: Option<&str>,
+) -> Option<String> {
+    let index_kind = index.get(name)?;
+    let kind = expected_kind.unwrap_or(index_kind.as_str());
 
     if kind == "namespace" {
         return Some(name.replace("::", "/"));
@@ -185,7 +190,7 @@ pub fn process_markdown(
             if let pulldown_cmark::CowStr::Borrowed(url) = dest_url {
                 if url.starts_with("::") {
                     let url = url.trim_start_matches("::");
-                    let real = get_path_for_name(url, index);
+                    let real = get_path_for_name(url, index, None);
 
                     if let Some(real) = real {
                         in_doc_link = true;
