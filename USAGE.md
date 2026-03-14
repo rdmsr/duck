@@ -1,24 +1,24 @@
 # Usage
-Projects using `cppdoc` must have a `cppdoc.toml` configuration file, see [CONFIG.md](CONFIG.md) for the available configuration options.
+Projects using `duck` must have a `duck.toml` configuration file, see [CONFIG.md](CONFIG.md) for the available configuration options.
 
 ## Command-line options:
 To build documentation for a project:
 
 ```
-cppdoc build
+duck build
 ```
 
 To output JSON representing the code base:
 
 ```
-cppdoc build -d
+duck build -d
 ```
 
 ### Cached Builds
 It is possible to do so-called cached builds, where the JSON output from a previous build is reuse and only markdown pages are rendered again:
 
 ```
-cppdoc build --cached <file>
+duck build --cached <file>
 ```
 
 Cached builds are useful when working on documentation outside of code changes.
@@ -48,7 +48,7 @@ enum MyEnum {
 ```
 
 
-Comments content are parsed as cppdoc-flavored markdown, there is no support for `javadoc`/Doxygen-style comments.
+Comments content are parsed as duck-flavored markdown, there is no support for `javadoc`/Doxygen-style comments.
 
 ### Hiding elements
 
@@ -60,7 +60,7 @@ struct Hidden {}
 ```
 
 ## Markdown syntax
-`cppdoc` introduces a few extensions to markdown.
+`duck` introduces a few extensions to markdown.
 
 - To link documentation objects, one must prefix the link path with `::`. For example:
 
@@ -79,7 +79,7 @@ graph TD;
 ```
 
 ## Documentation tests
-`cppdoc` supports running documentation tests akin to `rustdoc`, these tests are written in `cpp` and `c++` code blocks and help ensure that code examples are up-to-date with API usage.
+`duck` supports running documentation tests akin to `rustdoc`, these tests are written in `cpp` and `c++` code blocks and help ensure that code examples are up-to-date with API usage.
 
 Documentation code blocks feature special syntax:
 - Lines prefixed with `@` won't be displayed, but will be added to the source code:
@@ -115,7 +115,7 @@ Notice that documentation tests don't need a `main` function, this is because do
 
 
 ### Test framework
-`cppdoc` includes a basic test framework for documentation tests, this is useful for testing that examples still run successfully.
+`duck` includes a basic test framework for documentation tests, this is useful for testing that examples still run successfully.
 The following macros are defined:
 
 - `ASSERT` and `ASSERT_EQ`: test for truth and equality, respectively
@@ -139,4 +139,4 @@ ASSERT(a == 1);
 
 
 # Styling
-`cppdoc` expects a `style.css` file to be present at the root of the generated documentation and generates a `highlight.css` file from the syntax highlighting theme. It is recommended to put the style sheets in a static directory and set the `static` option in the configuration file.
+`duck` expects a `style.css` file to be present at the root of the generated documentation and generates a `highlight.css` file from the syntax highlighting theme. It is recommended to put the style sheets in a static directory and set the `static` option in the configuration file.
