@@ -49,9 +49,9 @@ const
     <div class="sidebar-scroll">
       <h2>Contents</h2>
       <ul>
-        <li> <a {% if page['path'] == 'index.html' %} class="active" {% else %} href="{{ config.output.base_url }}/index.html" {% endif %}>Index</a></li>
+        <li> <a {% if page['path'] == 'index.html' %} class="active" {% endif %} href="{{ config.output.base_url }}/index.html">Index</a></li>
         {% for segment in summary.segments %}
-          {% if segment.Section is defined %}
+           {% if segment.Section is defined %}
             <li><h3>{{ segment.Section }}</h3></li>
           {% else %}
             {{ self::output_page(page=segment.Page, curpage=page) }}
