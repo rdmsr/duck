@@ -9,15 +9,14 @@
   <li>
     {% if page['numbered'] %}{{ page['number'] }}.{% endif %} {% if curpage['path'] == page['path'] %}<a class="active" href="{{ config.output.base_url }}/{{ page['path'] }}.html">{{ page['name'] }}</a>{% else %}<a href="{{ config.output.base_url }}/{{ page['path'] }}.html">{{ page['name'] }}</a> {% endif %}
   </li>
-  {% if page.sub_pages %}
+  {% if page.sub_pages -%}
     <ul style="margin-left: {{ indent_level * 20 }}px;">
-      {% for subpage in page.sub_pages %}
+      {% for subpage in page.sub_pages -%}
         {{ self::output_page(page=subpage, curpage=curpage, indent_level=indent_level + 1) }}
-      {% endfor %}
+      {% endfor -%}
     </ul>
-  {% endif %}
+  {% endif -%}
 {% endmacro -%}
-
 
 
 {% macro output_method(method, namespace, parent) -%}
@@ -40,25 +39,19 @@ const
 {% macro sidebar(pages, project, summary, page) -%}
 <div class="sidebar" role="navigation" aria-label="Main">
   <div class="sidebarwrapper">
-    
     <h1>{{ project.name }}</h1>
     <form action="{{ config.output.base_url }}/search.html" method="get">
       <input class="searchbar" type="text" name="query" placeholder="Search...">
     </form>
-    
     <div class="sidebar-scroll">
       <h2>Contents</h2>
       <ul>
         <li> <a {% if page['path'] == 'index.html' %} class="active" {% endif %} href="{{ config.output.base_url }}/index.html">Index</a></li>
-        {% for segment in summary.segments %}
-           {% if segment.Section is defined %}
-            <li><h3>{{ segment.Section }}</h3></li>
-          {% else %}
-            {{ self::output_page(page=segment.Page, curpage=page) }}
-          {% endif %}
-        {% endfor %}
+        {% for segment in summary.segments -%}
+           {% if segment.Section is defined -%} <li><h3>{{ segment.Section }}</h3></li>
+		   {% else -%} {{ self::output_page(page=segment.Page, curpage=page) }} {% endif -%}
+        {% endfor -%}
       </ul>
-
       <h2>Reference</h2>
       <ul>
         <li><a href="{{ config.output.base_url }}/index.html#functions">Functions</a></li>
@@ -67,10 +60,8 @@ const
         <li><a href="{{ config.output.base_url }}/index.html#enums">Enums</a></li>
       </ul>
     </div>
-    
   </div>
 </div>
-
 <div class="mobile-nav" role="navigation" aria-label="Mobile Navigation">
   <h1>{{ project.name }}</h1>
   <form action="{{ config.output.base_url }}/search.html" method="get">
@@ -80,13 +71,10 @@ const
     <h2>Contents</h2>
     <ul>
       <li><a href="{{ config.output.base_url }}/index.html">Index</a></li>
-      {% for segment in summary.segments %}
-        {% if segment.Section is defined %}
-          <li><strong>{{ segment.Section }}</strong></li>
-        {% else %}
-          {{ self::output_page(page=segment.Page, curpage=page) }}
-        {% endif %}
-      {% endfor %}
+      {% for segment in summary.segments -%}
+        {% if segment.Section is defined -%}<li><strong>{{ segment.Section }}</strong></li>
+        {% else -%} {{ self::output_page(page=segment.Page, curpage=page) }} {% endif -%}
+      {% endfor -%}
     </ul>
     <h2>Reference</h2>
     <ul>

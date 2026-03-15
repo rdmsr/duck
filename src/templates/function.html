@@ -1,8 +1,8 @@
 {% extends "page" %}
 
-{% block title %}{{ function.name }} - {{ project.name }}{% endblock title %}
+{% block title -%}{{ function.name }} - {{ project.name }}{% endblock title -%}
 
-{% block content %}
+{%- block content -%}
 <div class="namespace-link">
     {{ get_link_for_namespace(namespace=function.namespace, parent=[])}}
 </div>
@@ -11,23 +11,23 @@
   {{ macros::output_method(method=function, namespace=function.namespace, parent=[]) }}
 </div>
 
-{% if function.overloads %}
+{%- if function.overloads -%}
 <h2> Overloads </h2>
-{% for overload in function.overloads %}
+{%- for overload in function.overloads -%}
 <div class="method highlight nobg"> {{ macros::output_method(method=overload, namespace=function.namespace, parent=[]) }} </div>
-{% if overload.comment %}
+{%- if overload.comment -%}
 <div class="item-desc">{{ overload.comment["brief"] }}</div>
 <div class="item-desc">{{ overload.comment["description"] }}</div>
-{% endif %}
-{% endfor %}
-{% endif %}
+{%- endif -%}
+{%- endfor -%}
+{%- endif -%}
 
-{% if function.comment %}
+{%- if function.comment -%}
 <h2> Description </h2>
 <div class="item-desc">{{ function.comment["brief"] }}</div>
 <div class="item-desc">{{ function.comment["description"] }}</div>
-{% endif %}
+{%- endif -%}
 
 
     
-{% endblock content %}
+{%- endblock content -%}

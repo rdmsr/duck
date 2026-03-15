@@ -5,81 +5,79 @@
 {% block content %}
 {{ content }}
 
-{% if namespace.namespaces %}
+{%- if namespace.namespaces -%}
   <h2 id="namespaces" class="section"> Namespaces </h2>
 <ul class="item-table">
-    {%- for ns in namespace.namespaces %}
+    {%- for ns in namespace.namespaces -%}
     <li>
       <a href="{{ config.output.base_url }}{{ namespace.name }}/{{ ns.name }}/index.html" class="item-name">{{ ns.name }}</a>
-    {% if ns.comment %}
+    {%- if ns.comment -%}
      <div class="item-desc">{{ ns.comment["brief"] }}</div>
-     {% endif %}
+     {%- endif -%}
      </li>
 
-    {%- endfor %}
+    {%- endfor -%}
   </ul>
 {% endif %}
-
-  {% if namespace.records %}
+  {%- if namespace.records -%}
   <h2 id="records" class="section"> Records </h2>
   <ul class="item-table">
-   {%- for record in namespace.records %}
+   {%- for record in namespace.records -%}
     <li>
     <a href="{{ config.output.base_url }}{{ namespace.name }}/record.{{ record.name }}.html" class="item-name">{{ record.name }}</a>
-    {% if record.comment %}
+    {%- if record.comment -%}
      <div class="item-desc">{{ record.comment["brief"] }}</div>
-    {% endif %}
+    {%- endif -%}
     </li>
-  {%- endfor %}
+  {%- endfor -%}
   </ul>
-  {% endif %}
+  {%- endif -%}
 
- {% if namespace.functions %}
+ {%- if namespace.functions -%}
   <h2 id="functions" class="section"> Functions </h2>
   <ul class="item-table">
-   {%- for func in namespace.functions %}
+   {%- for func in namespace.functions -%}
    <li>
-     {% if func.name == "operator/" %}
+     {%- if func.name == "operator/" -%}
      <a href="{{ config.output.base_url }}{{ namespace.name }}/function.operatorslash.html" class="item-name">operator/</a>
-     {% else %}
+     {%- else -%}
      <a href="{{ config.output.base_url }}{{ namespace.name }}/function.{{ func.name }}.html" class="item-name">{{ func.name }}</a>
-     {% endif %}
-    {% if func.comment %}
+     {%- endif -%}
+    {%- if func.comment -%}
      <div class="item-desc">{{ func.comment["brief"] }}</div>
-    {% endif %}
+    {%- endif -%}
     </li>
-  {%- endfor %}
+  {%- endfor -%}
   </ul>
-  {% endif %}
+  {%- endif -%}
 
-
- {% if namespace.enums %}
+ {%- if namespace.enums -%}
   <h2 id="enums" class="section"> Enums </h2>
   <ul class="item-table">
-   {%- for enum in namespace.enums %}
+   {%- for enum in namespace.enums -%}
     <li>
     <a href="{{ config.output.base_url }}{{ namespace.name }}/enum.{{ enum.name }}.html" class="item-name">{{ enum.name }}</a>
-    {% if enum.comment %}
+    {%- if enum.comment -%}
      <div class="item-desc">{{ enum.comment["brief"] }}</div>
-    {% endif %}
+    {%- endif -%}
     </li>
-  {%- endfor %}
+  {%- endfor -%}
   </ul>
-  {% endif %}
+  {%- endif -%}
 
- {% if namespace.aliases %}
+ {%- if namespace.aliases -%}
   <h2 id="aliases" class="section"> Aliases </h2>
   <ul class="item-table">
-   {%- for alias in namespace.aliases %}
+   {%- for alias in namespace.aliases -%}
     <li>
     <a href="{{ config.output.base_url }}{{ namespace.name }}/alias.{{ alias.name }}.html" class="item-name">{{ alias.name }}</a>
-    {% if alias.comment %}
+    {%- if alias.comment -%}
      <div class="item-desc">{{ alias.comment["brief"] }}</div>
-    {% endif %}
+    {%- endif -%}
     </li>
-  {%- endfor %}
+  {%- endfor -%}
   </ul>
-  {% endif %}
+  {%- endif -%}
 
  {% endblock content %}
     

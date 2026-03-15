@@ -2,28 +2,24 @@
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-	{% block head %}
+	{% block head -%}
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="{{ config.output.base_url }}/style.css" />
 	<title>{% block title %}{% endblock title %}</title>
-    {% if config.output.enable_mermaid %}
+    {% if config.output.enable_mermaid -%}
 	<script type="module">
-        {% if config.output.bundle_mermaid %}
+        {% if config.output.bundle_mermaid -%}
         import mermaid from '{{ config.output.base_url }}/mermaid.mjs';
-        {% else %}
+        {% else -%}
         import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-        {% endif %}
+        {% endif -%}
 	</script>
-    {% endif %}
-	{% endblock head %}
-
+    {% endif -%}
+	{% endblock head -%}
 </head>
-
 <body>
 	{{ macros::sidebar(pages=pages, project=project, summary=summary, page=page) }}
-
 	<div id="content">{% block content %}{% endblock content %}</div>
 </body>
 

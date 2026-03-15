@@ -1,8 +1,8 @@
-{% extends "page" %}
+{% extends "page" -%}
 
-{% block title %}{{ record.name }} - {{ project.name }}{% endblock title %}
+{% block title -%}{{ record.name }} - {{ project.name }}{% endblock title -%}
 
-{% block content %}
+{% block content -%}
 <div class="namespace-link">
     {{ get_link_for_namespace(namespace=record.namespace)}}
 </div>
@@ -10,99 +10,99 @@
 <h1>Record {{ record.name }}</h1>
 
     {{ listing }}
-    {% if record.comment %}
+    {% if record.comment -%}
     <h2> Description </h2>
      {{ record.comment["brief"] }}
      {{ record.comment["description"] }}
-    {% endif %}
+    {%- endif -%}
 
 
-    {% if record.fields %}
+    {%- if record.fields -%}
     <h2> Fields </h2>
-    {% for field in record.fields %}
+    {%- for field in record.fields -%}
     <div class="field highlight nobg">
         {{ macros::output_decl(decl=field, namespace=record.namespace, parent=record) }}
 
-    {% if field.comment %}
+    {%- if field.comment -%}
      <div class="item-desc">{{ field.comment["brief"] }}</div>
      <div class="item-desc">{{ field.comment["description"] }}</div>
-     {% endif %}
+     {%- endif -%}
     </div>
-    {% endfor %}
-    {% endif %}
+    {%- endfor -%}
+    {%- endif -%}
 
-    {% if record.ctor %}
+    {%- if record.ctor -%}
     <h2> Constructor </h2>
-    {% for ctor in record.ctor %}
+    {%- for ctor in record.ctor -%}
     <div class="method highlight nobg">
     {{ macros::output_method(method=ctor, namespace=record.namespace, parent=record) }}
     </div>
-    {% if ctor.comment %}
+    {%- if ctor.comment -%}
      <div class="item-desc">{{ ctor.comment["brief"] }}</div>
      <div class="item-desc">{{ ctor.comment["description"] }}</div>
-    {% endif %}
-    {% endfor %}
-    {% endif %}
+    {%- endif -%}
+    {%- endfor -%}
+    {%- endif -%}
 
 
-    {% if record.methods %}
+    {%- if record.methods -%}
     <h2> Methods </h2>
-    {% for method in record.methods %}
+    {%- for method in record.methods -%}
     <div class="method highlight nobg">
     {{ macros::output_method(method=method, namespace=record.namespace, parent=record) }}
     </div>
 
-    {% if method.comment %}
+    {%- if method.comment -%}
      <div class="item-desc">{{ method.comment["brief"] }}</div>
      <div class="item-desc">{{ method.comment["description"] }}</div>
-     {% endif %}
+     {%- endif -%}
 
-     {% if method.overloads %}
-     {% for overload in method.overloads %}
+     {%- if method.overloads -%}
+     {%- for overload in method.overloads -%}
      <div class="method highlight nobg">
        {{ macros::output_method(method=overload, namespace=record.namespace, parent=record) }}
      </div>
-     {% if overload.comment %}
+     {%- if overload.comment -%}
      <div class="item-desc">{{ overload.comment["brief"] }}</div>
      <div class="item-desc">{{ overload.comment["description"] }}</div>
-     {% endif %}
-     {% endfor %}
-     {% endif %}
+     {%- endif -%}
+     {%- endfor -%}
+     {%- endif -%}
      
-    {% endfor %}
-    {% endif %}
+    {%- endfor -%}
+    {%- endif -%}
 
-    {% if record.comment %}
-    {% if record.comment["impl"] %}
+    {%- if record.comment -%}
+    {%- if record.comment["impl"] -%}
     <h2> Concepts </h2>
     <p> This record implements the following concepts: </p>
     <ul>
-    {% for desc in record.comment["impl"] %}
+    {%- for desc in record.comment["impl"] -%}
     <li>{{ desc }}</li>
-    {% endfor %}
+    {%- endfor -%}
     </ul>
-    {% endif %}
-    {% endif %}
+    {%- endif -%}
+    {%- endif -%}
 
-    {% if record.nested %}
+    {%- if record.nested -%}
     <h2> Nested Types </h2>
-    {% for nested in record.nested %}
+    {%- for nested in record.nested -%}
     <div class="highlight nobg">
-      {% if nested.Enum %}
+      {%- if nested.Enum -%}
       {{ link_for_type(type=nested.Enum.name, namespace=nested.Enum.namespace) }}
-      {% else %}
+      {%- else -%}
       {{ link_for_type(type=nested.Record.name, namespace=nested.Record.namespace) }}
-      {% endif %}
+      {%- endif -%}
     </div>
-    {% if nested.comment %}
+    {%- if nested.comment -%}
      <div class="item-desc">{{ nested.comment["brief"] }}</div>
      <div class="item-desc">{{ nested.comment["description"] }}</div>
-     {% endif %}
-    {% endfor %}
-    {% endif %}
+     {%- endif -%}
+    {%- endfor -%}
+    {%- endif -%}
      
 
-{% endblock content %}
+{%- endblock content -%}
 
 
    

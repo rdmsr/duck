@@ -1,27 +1,25 @@
-{% extends "page" %}
+{% extends "page" -%}
 
-{% block title %}{{ enum.name }} - {{ project.name }}{% endblock title %}
+{%- block title -%}{{ enum.name }} - {{ project.name }}{%- endblock title -%}
 
-{% block content %}
+{%- block content -%}
 <div class="namespace-link">
     {{ get_link_for_namespace(namespace=enum.namespace) }}
 </div>
 
 <h1>Enum {{ enum.name }}</h1>
-
     {{ listing }}
-    {% if enum.comment %}
+    {%- if enum.comment -%}
     <h2> Description </h2>
      {{ enum.comment["brief"] }}
      {{ enum.comment["description"] }}
-    {% endif %}
-
+    {%- endif -%}
     <h2> Values </h2>
-    {% for value in enum.values %}
+    {%- for value in enum.values -%}
     <div class="highlight nobg" id="{{ value.name }}"><code>{{ value.name }}</code></div>
-    {% if value.comment %}
+    {%- if value.comment -%}
     <div class="item-desc">{{ value.comment["brief"] }}</div>
     <div class="item-desc">{{ value.comment["description"] }}</div>
-    {% endif %}
-    {% endfor %}
-{% endblock content %}
+    {%- endif -%}
+    {%- endfor -%}
+{%- endblock content -%}
