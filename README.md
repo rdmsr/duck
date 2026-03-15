@@ -25,3 +25,8 @@ Most C/C++ documentation generators (like Doxygen) produce API references, a lis
 
 ## Usage
 See [USAGE.md](USAGE.md)
+
+## Projects using duck
+Open a PR to add your project!
+
+- [uACPI](https://uacpi.github.io/)

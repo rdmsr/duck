@@ -15,4 +15,4 @@ struct OtherStruct {
 /// A function that does nothing
 /// - `a`: First parameter
 /// - `b`: Second parameter
-void function(int a, OtherStruct b);
+void function(int a, OtherStruct *b);
