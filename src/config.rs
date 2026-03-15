@@ -33,7 +33,7 @@ pub struct Output {
     pub static_dir: String,
     pub path: String,
     pub root_namespace: Option<String>,
-    pub base_url: String,
+    pub base_url: Option<String>,
     #[serde(default = "bool_true")]
     pub enable_mermaid: bool,
     #[serde(default)]

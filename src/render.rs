@@ -195,7 +195,12 @@ pub fn process_markdown(
                     if let Some(real) = real {
                         in_doc_link = true;
                         return Some(Event::Html(
-                            format!("<a href=\"{}/{}.html\">", config.output.base_url, real).into(),
+                            format!(
+                                "<a href=\"{}/{}.html\">",
+                                config.output.base_url.clone().unwrap_or("".to_string()),
+                                real
+                            )
+                            .into(),
                         ));
                     }
                 }

@@ -1,5 +1,5 @@
 # Configuration options
-The configuration file is a TOML file named `cppdoc.toml` with the following sections:
+The configuration file is a TOML file named `duck.toml` with the following sections:
 
 ## `project`
 - `name`: Project name.
@@ -13,7 +13,7 @@ The configuration file is a TOML file named `cppdoc.toml` with the following sec
 - `static_dir`: Path to a directory containing static files that will be copied in the output directory, this is where `style.css` will typically be located.
 - `path`: Path to the output directory.
 - `root_namespace` (optional): Namespace to use as the root, this is useful for libraries that only globally expose one namespace and want the index to be based on that namespace.
-- `base_url`: Base URL to prepend all paths with.
+- `base_url`: Base URL to prepend all paths with (optional).
 - `enable_mermaid`: Whether to enable mermaid, default: `true`
 - `bundle_mermaid`: Whether to bundle mermaid (`mermaid.mjs` in the static directory), otherwise it is fetched from a release online, default: `false`
 - `bundle_minisearch`: Whether to bundle minisearch (`minisearch.js` in the static directory), otherwise it is fetched from a release online, default `false`
@@ -22,7 +22,7 @@ The configuration file is a TOML file named `cppdoc.toml` with the following sec
 - `theme_set_file` (optional): Path to a compressed .themedump `syntect` theme set file
 
 
-## `pages`
+## `pages` (optional)
 - `index` (optional): Markdown file to use as the index file, if an index page is not specified, the root namespace's comment will be used instead.
 - `book` (optional): Path to directory containing an `mdbook`-type `SUMMARY.md` file, listing all pages
 
@@ -50,7 +50,7 @@ book = "extra-pages"
 [output]
 static_dir = "static"
 path = "docs"
-base_url = "/cppdoc"
+base_url = "/duck"
 theme = "ayu-dark"
 
 [doctests]

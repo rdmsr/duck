@@ -378,6 +378,8 @@ fn get_link_for_type(
         ));
     }
 
+    let base_url = config.output.base_url.clone().unwrap_or("".to_string());
+
     // if name starts with '::', then we must use the global namespace
     if cleaned_name.starts_with("::") {
         let cleaned_name = cleaned_name.trim_start_matches("::");
@@ -386,7 +388,7 @@ fn get_link_for_type(
         if let Some(ret) = ret {
             return Some(format!(
                 "<a href=\"{}/{}.html\"><span class=\"storage type c\">{}</span></a>{}",
-                config.output.base_url, ret, name_without_suffix, suffix
+                base_url, ret, name_without_suffix, suffix
             ));
         }
     }
@@ -415,7 +417,7 @@ fn get_link_for_type(
     if let Some(ret) = ret {
         return Some(format!(
             "<a href=\"{}/{}.html\"><span class=\"storage type c\">{}</span></a>{}",
-            config.output.base_url, ret, name_without_suffix, suffix
+            base_url, ret, name_without_suffix, suffix
         ));
     }
 
@@ -425,7 +427,7 @@ fn get_link_for_type(
     if let Some(ret) = ret {
         return Some(format!(
             "<a href=\"{}/{}.html\"><span class=\"storage type c\">{}</span></a>{}",
-            config.output.base_url, ret, name_without_suffix, suffix
+            base_url, ret, name_without_suffix, suffix
         ));
     }
 
@@ -442,7 +444,7 @@ fn get_link_for_type(
         if let Some(ret) = ret {
             return Some(format!(
                 "<a href=\"{}/{}.html\"><span class=\"storage type c\">{}</span></a>{}",
-                config.output.base_url, ret, name_without_suffix, suffix
+                base_url, ret, name_without_suffix, suffix
             ));
         }
 
