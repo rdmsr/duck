@@ -341,7 +341,13 @@ fn main() {
 
             if let Some(book_dir) = pages_config.and_then(|p| p.book.as_ref()) {
                 let path = std::path::Path::new(book_dir).join("SUMMARY.md");
-                let contents = std::fs::read_to_string(path).unwrap();
+                let contents = match std::fs::read_to_string(&path) {
+                    Ok(c) => c,
+                    Err(_) => {
+                        report_error(&format!("Could not find book dir summary file: {:?}", path));
+                        "".into()
+                    }
+                };
                 summary = book::parse_summary(&contents, book_dir);
             }
 
