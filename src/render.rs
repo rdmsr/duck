@@ -58,6 +58,23 @@ pub fn get_namespace_path(name: &str) -> String {
     name.replace("::", "/")
 }
 
+fn escape_html(input: &str) -> String {
+    let mut escaped = String::with_capacity(input.len());
+
+    for ch in input.chars() {
+        match ch {
+            '&' => escaped.push_str("&amp;"),
+            '<' => escaped.push_str("&lt;"),
+            '>' => escaped.push_str("&gt;"),
+            '"' => escaped.push_str("&quot;"),
+            '\'' => escaped.push_str("&#39;"),
+            _ => escaped.push(ch),
+        }
+    }
+
+    escaped
+}
+
 pub fn process_markdown(
     input: &str,
     index: &HashMap<String, String>,
@@ -83,16 +100,23 @@ pub fn process_markdown(
 
     let parser = pulldown_cmark::Parser::new_ext(input, options).filter_map(|event| match event {
         // -- Add support for mermaid code blocks and syntax highlighting --
-        Event::Start(Tag::CodeBlock(CodeBlockKind::Fenced(lang))) => {
-            code_lang = lang.to_string();
+        Event::Start(Tag::CodeBlock(kind)) => {
+            code_lang = match kind {
+                CodeBlockKind::Fenced(lang) => lang.to_string(),
+                CodeBlockKind::Indented => String::new(),
+            };
+            code.clear();
             in_code_block = true;
             None
         }
         Event::End(TagEnd::CodeBlock) => {
             if code_lang == "mermaid" {
-                Some(Event::Html(
-                    format!("<div class=\"mermaid\">{}</div>", code).into(),
-                ))
+                let html = format!("<div class=\"mermaid\">{}</div>", code);
+
+                in_code_block = false;
+                code_lang.clear();
+                code.clear();
+                Some(Event::Html(html.into()))
             } else {
                 if code_lang == "cpp" || code_lang == "c++" || code_lang.is_empty() {
                     let doctest = doctest::Doctest::new(code.clone(), true);
@@ -140,10 +164,14 @@ pub fn process_markdown(
                         generated_html
                     );
                 } else {
-                    html = format!("<div class=\"code highlight\"><pre>{}</pre></div>", code);
+                    html = format!(
+                        "<div class=\"code highlight\"><pre>{}</pre></div>",
+                        escape_html(&code)
+                    );
                 }
 
                 in_code_block = false;
+                code_lang.clear();
                 code.clear();
                 Some(Event::Html(html.into()))
             }
